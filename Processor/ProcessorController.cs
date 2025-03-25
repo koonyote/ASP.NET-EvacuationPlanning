@@ -43,22 +43,36 @@ namespace EvacuationPlanning.Processor
 
             var result = new List<EvacuationPlanDto>();
 
-            // ค้นหาตาม Urgency Priority
+            // เรียงลำดับการทำงานตาม Urgency Priority
             foreach (var zone in zones.OrderByDescending(o => o.UrgencyLevel))
             {
+                if (vehicles.Count == 0) break; // หากรถหมดแล้ว ให้หยุดทำงาน 
+
                 // ค้นหารถที่ ใช้เวลาน้อยที่สุด
-                var calVehicle = vehicles.Select(s => new
+                var listVehicle = vehicles.Select(s => new
                 {
                     info = FindVehicleDistance(s, zone.LocationCoordinates)
-                }).OrderBy(o => o.info.Distance);
+                })
+                .OrderBy(o => o.info.ETA)
+                .ThenBy(o => o.info.Distance)
+                .ToArray();
 
-                var selectVeh = calVehicle.First(); 
+                var selectVeh = listVehicle.First();
+
+                // ค้นหารถ ลำดับที่สอง หากความจุมากกว่าหรือเท่ากับ 10 คน และใช้เวลาไม่มากกว่า 3 นาที ก็ให้ใช้คันนี้แทน 
+                double maxMinute = 3, moreCapacity = 20;
+                var second = listVehicle.Where(w =>
+                ( w.info.Vehicle.Capacity - selectVeh.info.Vehicle.Capacity) >= moreCapacity
+                && (w.info.ETA - selectVeh.info.ETA) <= maxMinute)
+                .OrderBy(o => o.info.Vehicle.Capacity).ThenBy(o => o.info.ETA);
+
+                if (second.Any()) selectVeh = second.First();
 
                 result.Add(new EvacuationPlanDto()
                 {
                     ZoneID = zone.ZoneId,
                     VehicleID = selectVeh.info.Vehicle.VehicleId,
-                    ETA = selectVeh.info.ETA+ " minutes",
+                    ETA = selectVeh.info.ETA + " minutes",
                     NumberOfPeople = selectVeh.info.Vehicle.Capacity
                 });
 
@@ -81,7 +95,7 @@ namespace EvacuationPlanning.Processor
             {
                 Vehicle = vehicle,
                 Distance = distance,
-                ETA = Math.Round(eta,0)
+                ETA = Math.Round(eta, 0)
             };
         }
 

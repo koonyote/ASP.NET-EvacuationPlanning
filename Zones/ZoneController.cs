@@ -23,9 +23,9 @@ namespace EvacuationPlanning.Zones
         }
 
         [HttpGet("Zones/GetAll")]
-        public async Task<IActionResult> GetAllZone()
+        public async Task<List<ZoneDto>> GetAllZone()
         {
-            return Ok(await _service.GetAllZoneAsync());
+            return await _service.GetAllZoneAsync();
         }
 
         [HttpGet("Zones/Get/{id}")]

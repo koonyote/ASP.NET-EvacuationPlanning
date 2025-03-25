@@ -23,9 +23,9 @@ namespace EvacuationPlanning.Vehicles
         }
 
         [HttpGet("Vehicles/GetAll")]
-        public async Task<IActionResult> GetAllVehicle()
+        public async Task<List<VehicleDto>> GetAllVehicle()
         {
-            return Ok(await _service.GetAllVehicleAsync());
+            return await _service.GetAllVehicleAsync();
         }
 
         [HttpGet("Vehicle/Get/{id}")]

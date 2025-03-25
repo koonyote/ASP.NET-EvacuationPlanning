@@ -15,6 +15,7 @@ namespace EvacuationPlanning.Zones.Dto
 
     public enum UrgencyLevel
     {
+        None,
         VeryLow,
         Low,
         Medium,

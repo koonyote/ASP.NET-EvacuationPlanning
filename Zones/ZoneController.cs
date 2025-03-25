@@ -22,13 +22,13 @@ namespace EvacuationPlanning.Zones
             return Ok("Added successfully!");
         }
 
-        [HttpGet("GetAllZones")]
+        [HttpGet("Zones/GetAll")]
         public async Task<IActionResult> GetAllZone()
         {
             return Ok(await _service.GetAllZoneAsync());
         }
 
-        [HttpGet("get/{id}")]
+        [HttpGet("Zones/Get/{id}")]
         public async Task<IActionResult> GetZone(string id)
         {
             var zone = await _service.GetOneZoneAsync(id);

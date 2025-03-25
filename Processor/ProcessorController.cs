@@ -5,6 +5,7 @@ using EvacuationPlanning.Vehicles.Dto;
 using EvacuationPlanning.Zones;
 using EvacuationPlanning.Zones.Dto;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.OpenApi.Validations;
 using System.Diagnostics;
 using System.Security.Cryptography.X509Certificates;
@@ -116,16 +117,42 @@ namespace EvacuationPlanning.Processor
             var transport = new TransportDto()
             {
                 Id = DateTime.Now.ToString("yyyyMMddHHmmss"),
-                ZoneID = zoneId,
-                VehicleID = vehicleId,
+                ZoneId = zoneId,
+                VehicleId = vehicleId,
                 Amount = amount
             };
 
             await _service.SaveTransportAsync(transport);
         }
 
+        [HttpPost("evacuations/status")]
+        public async Task<GetEvacuationStatusDto[]> GetEvacuationStatus()
+        {
+            var zones = await _zone.GetAllZone();
 
+            var transports = await _service.GetAllTransportAsync();
 
+            var result = new List<GetEvacuationStatusDto>();
+
+            foreach (var zone in zones)
+            {
+                var query = transports.Where(w => w.ZoneId == zone.ZoneId).OrderBy(o => o.Id);
+
+                int transferAmount = transports.Where(w => w.ZoneId == zone.ZoneId).Sum(s => s.Amount);
+
+                string? lastVehicleUsed = (query.Any()) ? query.Last().VehicleId : null;
+
+                result.Add(new GetEvacuationStatusDto()
+                {
+                    ZoneId = zone.ZoneId,
+                    TotalEvacuated = zone.NumberOfPeople,
+                    RemainingPeople = zone.NumberOfPeople - transferAmount,
+                    LastVehicleUsed = lastVehicleUsed,
+                });
+            }
+
+            return result.OrderBy(o => o.ZoneId).ToArray();
+        }
 
 
 

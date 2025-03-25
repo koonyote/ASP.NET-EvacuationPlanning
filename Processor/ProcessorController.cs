@@ -5,6 +5,7 @@ using EvacuationPlanning.Vehicles.Dto;
 using EvacuationPlanning.Zones;
 using EvacuationPlanning.Zones.Dto;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Validations;
 using System.Diagnostics;
 using System.Security.Cryptography.X509Certificates;
 
@@ -105,6 +106,33 @@ namespace EvacuationPlanning.Processor
         }
 
 
+        [HttpPost("evacuations/update")]
+        public async Task AssignTransport(string zoneId, string vehicleId, int amount)
+        {
+            var zone = await _zone.GetZone(zoneId);
+
+            var vehicle = await _vehicle.GetVehicle(vehicleId);
+
+            var transport = new TransportDto()
+            {
+                Id = DateTime.Now.ToString("yyyyMMddHHmmss"),
+                ZoneID = zoneId,
+                VehicleID = vehicleId,
+                Amount = amount
+            };
+
+            await _service.SaveTransportAsync(transport);
+        }
+
+
+
+
+
+
+
+
+
+
 
         //[HttpGet("Haversine")]
         //public double HaversineCal(double lat1, double lon1, double lat2, double lon2) => HaversineFormula.Haversine(lat1, lon1, lat2, lon2);
@@ -182,8 +210,8 @@ namespace EvacuationPlanning.Processor
             }
         }
 
-        [HttpPost("Initial2")]
-        public async Task InitialTest()
+        [HttpPost("Test")]
+        private async Task Test()
         {
             var vehicles = new List<VehicleDto>()
             {

@@ -25,6 +25,7 @@ builder.Services.AddEndpointsApiExplorer();
 // Add services to the container
 builder.Services.AddScoped<ZoneService>();
 builder.Services.AddScoped<VehicleService>();
+builder.Services.AddScoped<ProcessorService>();
 
 // Interface implement & Dependency Injection 
 builder.Services.AddScoped<IZoneController, ZoneController>();

@@ -6,7 +6,7 @@ namespace EvacuationPlanning.Vehicles
     [ApiController]
     //[Route("api/[controller]")]
     [Route("api")]
-    public class VehicleController : ControllerBase
+    public class VehicleController : ControllerBase, IVehicleController
     {
         private readonly VehicleService _service;
 

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 using EvacuationPlanning.Zones;
 using EvacuationPlanning.Vehicles;
+using EvacuationPlanning.Processor;
 
 [assembly: ApiController]
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +25,10 @@ builder.Services.AddEndpointsApiExplorer();
 // Add services to the container
 builder.Services.AddScoped<ZoneService>();
 builder.Services.AddScoped<VehicleService>();
+
+// Interface implement & Dependency Injection 
+builder.Services.AddScoped<IZoneController, ZoneController>();
+builder.Services.AddScoped<IVehicleController, VehicleController>();
 
 
 builder.Services.AddSwaggerGen(c =>

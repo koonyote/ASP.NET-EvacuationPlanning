@@ -6,7 +6,7 @@ namespace EvacuationPlanning.Zones
     [ApiController]
     //[Route("api/[controller]")]
     [Route("api")]
-    public class ZoneController : ControllerBase
+    public class ZoneController : ControllerBase, IZoneController
     {
         private readonly ZoneService _service;
 

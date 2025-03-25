@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EvacuationPlanning.ApplicationShare;
+using System.ComponentModel.DataAnnotations;
 
 namespace EvacuationPlanning.Zones.Dto
 {
@@ -7,9 +8,7 @@ namespace EvacuationPlanning.Zones.Dto
         [Required]
         public required string ZoneId { get; set; }
         [Required]
-        public required double Latitude { get; set; }
-        [Required]
-        public required double Longitude { get; set; }
+        public required CoordinatesDto LocationCoordinates { get; set; }
         public int NumberOfPeople { get; set; }
         public UrgencyLevel UrgencyLevel { get; set; }
     }

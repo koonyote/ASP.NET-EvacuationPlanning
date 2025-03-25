@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EvacuationPlanning.ApplicationShare;
+using System.ComponentModel.DataAnnotations;
 
 namespace EvacuationPlanning.Vehicles.Dto
 {
@@ -11,9 +12,7 @@ namespace EvacuationPlanning.Vehicles.Dto
         [Required]
         public required string Type { get; set; }
         [Required]
-        public required double Latitude { get; set; }
-        [Required]
-        public required double Longitude { get; set; }
+        public required CoordinatesDto LocationCoordinates { get; set; }
         [Required]
         public required double Speed { get; set; }
     }

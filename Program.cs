@@ -2,6 +2,8 @@ using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
+using EvacuationPlanning.Zones;
+
 [assembly: ApiController]
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,10 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Conn
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
+
+// Add services to the container
+builder.Services.AddScoped<ZoneService>();
+
 
 builder.Services.AddSwaggerGen(c =>
 {

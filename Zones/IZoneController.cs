@@ -7,6 +7,6 @@ namespace EvacuationPlanning.Zones
     {
         Task<IActionResult> AddZone(ZoneDto input);
         Task<List<ZoneDto>> GetAllZone();
-        Task<IActionResult> GetZone(string id);
+        Task<ZoneDto> GetZone(string id);
     }
 }

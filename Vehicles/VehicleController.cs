@@ -29,10 +29,9 @@ namespace EvacuationPlanning.Vehicles
         }
 
         [HttpGet("Vehicle/Get/{id}")]
-        public async Task<IActionResult> GetVehicle(string id)
+        public async Task<VehicleDto> GetVehicle(string id)
         {
-            var vehicle = await _service.GetOneVehicleAsync(id);
-            return Ok(vehicle);
+            return await _service.GetOneVehicleAsync(id);
         }
     }
 }

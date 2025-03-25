@@ -7,6 +7,6 @@ namespace EvacuationPlanning.Vehicles
     {
         Task<IActionResult> AddVehicle(VehicleDto input);
         Task<List<VehicleDto>> GetAllVehicle();
-        Task<IActionResult> GetVehicle(string id);
+        Task<VehicleDto> GetVehicle(string id);
     }
 }

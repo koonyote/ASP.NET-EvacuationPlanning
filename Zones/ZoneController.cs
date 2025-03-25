@@ -29,10 +29,9 @@ namespace EvacuationPlanning.Zones
         }
 
         [HttpGet("Zones/Get/{id}")]
-        public async Task<IActionResult> GetZone(string id)
+        public async Task<ZoneDto> GetZone(string id)
         {
-            var zone = await _service.GetOneZoneAsync(id);
-            return Ok(zone);
+            return await _service.GetOneZoneAsync(id);
         }
     }
 }

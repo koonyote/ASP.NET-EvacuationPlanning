@@ -59,14 +59,14 @@ namespace EvacuationPlanning.Processor
 
                 var selectVeh = listVehicle.First();
 
-                // ค้นหารถ ลำดับที่สอง หากความจุมากกว่าหรือเท่ากับ 10 คน และใช้เวลาไม่มากกว่า 3 นาที ก็ให้ใช้คันนี้แทน 
-                double maxMinute = 3, moreCapacity = 20;
-                var second = listVehicle.Where(w =>
-                ( w.info.Vehicle.Capacity - selectVeh.info.Vehicle.Capacity) >= moreCapacity
-                && (w.info.ETA - selectVeh.info.ETA) <= maxMinute)
-                .OrderBy(o => o.info.Vehicle.Capacity).ThenBy(o => o.info.ETA);
+                // ค้นหารถ ลำดับที่สอง หากความจุมากกว่าหรือเท่ากับ 10 คน และใช้เวลาไม่มากกว่า 3 นาที ก็ให้ใช้คันนี้แทน (Capacity Optimization)
+                //double maxMinute = 3, moreCapacity = 20;
+                //var second = listVehicle.Where(w =>
+                //( w.info.Vehicle.Capacity - selectVeh.info.Vehicle.Capacity) >= moreCapacity
+                //&& (w.info.ETA - selectVeh.info.ETA) <= maxMinute)
+                //.OrderBy(o => o.info.Vehicle.Capacity).ThenBy(o => o.info.ETA);
 
-                if (second.Any()) selectVeh = second.First();
+                //if (second.Any()) selectVeh = second.First();
 
                 result.Add(new EvacuationPlanDto()
                 {
@@ -74,6 +74,11 @@ namespace EvacuationPlanning.Processor
                     VehicleID = selectVeh.info.Vehicle.VehicleId,
                     ETA = selectVeh.info.ETA + " minutes",
                     NumberOfPeople = selectVeh.info.Vehicle.Capacity
+
+                    //# Debug
+                    //, Speed = selectVeh.info.Vehicle.Speed,
+                    //Vehicle = selectVeh.info.Vehicle.LocationCoordinates,
+                    //Zone = zone.LocationCoordinates,
                 });
 
                 vehicles.Remove(selectVeh.info.Vehicle);

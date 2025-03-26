@@ -1,4 +1,6 @@
-﻿namespace EvacuationPlanning.Processor.Dto
+﻿using EvacuationPlanning.ApplicationShare;
+
+namespace EvacuationPlanning.Processor.Dto
 {
     public class TransportDto
     {
@@ -12,5 +14,8 @@
         public required string Unit { get; set; }
         public required string ETA { get; set; }
         public required string Progress { get; set; }
+
+        public required CoordinatesDto VehicleCoordinates { get; set; }
+        public required CoordinatesDto ZoneCoordinates { get; set; }
     }
 }

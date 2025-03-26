@@ -141,7 +141,10 @@ namespace EvacuationPlanning.Processor
                 Distance = Math.Round(distance.Distance, 2),
                 Unit = "KM.",
                 ETA = distance.ETA + " minutes",
-                Progress = status
+                Progress = status,
+
+                VehicleCoordinates = vehicle.LocationCoordinates,
+                ZoneCoordinates = zone.LocationCoordinates,
             };
 
             await _service.SaveTransportAsync(transport);
@@ -179,7 +182,11 @@ namespace EvacuationPlanning.Processor
             return result.OrderBy(o => o.ZoneId).ToArray();
         }
 
-
+        [HttpPost("GetAllTransportLogs")]
+        public async Task<List<TransportDto>> GetAllTransportAsync()
+        {
+            return await _service.GetAllTransportAsync();
+        }
 
 
 

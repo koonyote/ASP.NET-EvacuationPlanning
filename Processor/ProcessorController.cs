@@ -68,13 +68,13 @@ namespace EvacuationPlanning.Processor
                 var selectVeh = listVehicle.First();
 
                 // ค้นหารถ ลำดับที่สอง หากความจุมากกว่าหรือเท่ากับ 10 คน และใช้เวลาไม่มากกว่า 3 นาที ก็ให้ใช้คันนี้แทน (Capacity Optimization)
-                //double maxMinute = 3, moreCapacity = 20;
-                //var second = listVehicle.Where(w =>
-                //( w.info.Vehicle.Capacity - selectVeh.info.Vehicle.Capacity) >= moreCapacity
-                //&& (w.info.ETA - selectVeh.info.ETA) <= maxMinute)
-                //.OrderBy(o => o.info.Vehicle.Capacity).ThenBy(o => o.info.ETA);
+                double maxMinute = 3, moreCapacity = 20;
+                var second = listVehicle.Where(w =>
+                (w.info.Vehicle.Capacity - selectVeh.info.Vehicle.Capacity) >= moreCapacity
+                && (w.info.ETA - selectVeh.info.ETA) <= maxMinute)
+                .OrderBy(o => o.info.Vehicle.Capacity).ThenBy(o => o.info.ETA);
 
-                //if (second.Any()) selectVeh = second.First();
+                if (second.Any()) selectVeh = second.First();
 
                 result.Add(new EvacuationPlanDto()
                 {
@@ -113,7 +113,7 @@ namespace EvacuationPlanning.Processor
         }
 
 
-        [HttpPost("evacuations/update")]
+        [HttpPut("evacuations/update")]
         public async Task AssignTransport(string zoneId, string vehicleId, int amount)
         {
             var zone = await _zone.GetZone(zoneId);
@@ -182,7 +182,7 @@ namespace EvacuationPlanning.Processor
             return result.OrderBy(o => o.ZoneId).ToArray();
         }
 
-        [HttpPost("GetAllTransportLogs")]
+        [HttpGet("GetAllTransportLogs")]
         public async Task<List<TransportDto>> GetAllTransportAsync()
         {
             return await _service.GetAllTransportAsync();

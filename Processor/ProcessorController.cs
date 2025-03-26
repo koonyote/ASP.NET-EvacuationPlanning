@@ -50,6 +50,12 @@ namespace EvacuationPlanning.Processor
             {
                 if (vehicles.Count == 0) break; // หากรถหมดแล้ว ให้หยุดทำงาน 
 
+                var logs = await _service.GetAllTransportAsync();
+
+                int transferAmount = logs.Where(w => w.ZoneId == zone.ZoneId).Sum(s => s.Amount);
+
+                if (transferAmount >= zone.NumberOfPeople) continue; // หากผู้คนอพยกหมดแล้ว ให้ข้ามไป
+
                 // ค้นหารถที่ ใช้เวลาน้อยที่สุด
                 var listVehicle = vehicles.Select(s => new
                 {
@@ -114,12 +120,28 @@ namespace EvacuationPlanning.Processor
 
             var vehicle = await _vehicle.GetVehicle(vehicleId);
 
+            var distance = FindVehicleDistance(vehicle, zone.LocationCoordinates);
+
+            var logs = await _service.GetAllTransportAsync();
+
+            int transferAmount = logs.Where(w => w.ZoneId == zone.ZoneId).Sum(s => s.Amount);
+
+            string completed = "C", inProcess = "I";
+
+            string status = ((transferAmount + amount) >= zone.NumberOfPeople) ? completed : inProcess;
+
             var transport = new TransportDto()
             {
                 Id = DateTime.Now.ToString("yyyyMMddHHmmss"),
                 ZoneId = zoneId,
                 VehicleId = vehicleId,
-                Amount = amount
+                Amount = amount,
+                RemainingPeople = (status == completed) ? 0 : zone.NumberOfPeople - (transferAmount + amount),
+                Speed = vehicle.Speed,
+                Distance = Math.Round(distance.Distance, 2),
+                Unit = "KM.",
+                ETA = distance.ETA + " minutes",
+                Progress = status
             };
 
             await _service.SaveTransportAsync(transport);
@@ -142,12 +164,15 @@ namespace EvacuationPlanning.Processor
 
                 string? lastVehicleUsed = (query.Any()) ? query.Last().VehicleId : null;
 
+                string? operationStatus = (query.Any()) ? query.Last().Progress : null;
+
                 result.Add(new GetEvacuationStatusDto()
                 {
                     ZoneId = zone.ZoneId,
                     TotalEvacuated = zone.NumberOfPeople,
-                    RemainingPeople = zone.NumberOfPeople - transferAmount,
+                    RemainingPeople = (zone.NumberOfPeople - transferAmount < 0) ? 0 : zone.NumberOfPeople - transferAmount,
                     LastVehicleUsed = lastVehicleUsed,
+                    OperationStatus = operationStatus,
                 });
             }
 

@@ -6,5 +6,6 @@
         public required int TotalEvacuated { get; set;}
         public required int RemainingPeople { get; set;}
         public string? LastVehicleUsed { get; set;}
+        public string? OperationStatus { get; set; }
     }
 }

@@ -39,17 +39,6 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1",
         Title = "EvacuationPlanning API",
         Description = "An ASP.NET Core Web API",
-        //TermsOfService = new Uri("https://example.com/terms"),
-        //Contact = new OpenApiContact
-        //{
-        //    Name = "Prayote.Moomthong@gmail.com",
-        //    //Url = new Uri("https://example.com/contact")
-        //},
-        //License = new OpenApiLicense
-        //{
-        //    Name = "Example License",
-        //    Url = new Uri("https://example.com/license")
-        //}
     }
     );
 });
@@ -60,14 +49,16 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     //app.MapOpenApi();
-
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-    });
-
+    //app.UseHttpsRedirection();
 }
+
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+
+    //c.RoutePrefix = string.Empty;
+});
 
 app.MapGet("/", () => "Hello World!");
 

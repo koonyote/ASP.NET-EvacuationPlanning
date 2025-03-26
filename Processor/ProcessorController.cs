@@ -150,7 +150,7 @@ namespace EvacuationPlanning.Processor
             await _service.SaveTransportAsync(transport);
         }
 
-        [HttpPost("evacuations/status")]
+        [HttpGet("evacuations/status")]
         public async Task<GetEvacuationStatusDto[]> GetEvacuationStatus()
         {
             var zones = await _zone.GetAllZone();

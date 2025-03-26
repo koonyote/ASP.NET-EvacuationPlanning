@@ -13,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 //builder.Services.AddOpenApi();
 
-var redisDbConnection = builder.Configuration.GetConnectionString("RedisDatabase") ??
+var redisDbConnection = builder.Configuration.GetConnectionString("RedisAzure") ??
      throw new InvalidOperationException("Connection string 'RedisDatabase'" + " not found.");
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisDbConnection));
